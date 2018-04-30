@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!-- This is a comment TAG! JEDI MIND TRICK: You will use this all the time!! -->
+    <meta charset="utf-8">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script src="lib/jquery-3.3.1.min.js" type="text/javascript">
+    </script>
+    <!-- Metadata is readed only by browsers... they define very important aspects of the web site! Web design issues and page refresh for example -->
+    <title>My first (oh well) Web Site</title>
+</head>
+
+
+
+<body id="background">
+
+
+    <nav class="navigationtop">
+        <ol align="left">
+            <li>
+                <a href="firstWeb.html">
+                    <img src="data/Logo.png" title="Gross" width="400px" height="80px" id="Logo"> </a>
+            </li>
+            <li class="loginText">
+                <a href="Login.html"> Login </a>
+            </li>
+            <li class="loginText">
+                <a href="index.html">Register </a>
+            </li>
+            <li> Exp :
+                <span id="points">0</span>
+            </li>
+        </ol>
+    </nav>
+
+    <section id="FriendList">
+        <ul>
+            <li>
+                <button onclick="startChat()">Friend </button>
+            </li>
+            <li onclick="startChat()">Friend </li>
+            <li onclick="startChat">Friend </li>
+            <li onclick="startChat">Friend </li>
+            <li onclick="startChat">Friend </li>
+            <li onclick="startChat">Friend </li>
+            <li onclick="startChat">Friend </li>
+
+        </ul>
+    </section>
+    <div id="chat"></div>
+
+
+
+    <div class="container" style="max-width:800px;">
+
+
+        <div id="gameCanvas" style="position:relative">
+
+        </div>
+
+        <nav class="navigationBottom">
+            <ol>
+                <li>
+                    <a href="problem.html"> Articles </a>
+                </li>
+                <li>
+                    <a href="game.html">Solutions</a>
+                </li>
+                <li> Our own solution</li>
+                <li> Profile</li>
+                <li>
+                    <a href="AboutUs.html">About Us </a>
+                </li>
+            </ol>
+        </nav>
+
+    </div>
+    <script src="three.js"></script>
+    <script src="Tiles.js"></script>
+    <script>
+
+
+        var up;
+        var down;
+        var left;
+        var right;
+        var examineMode = true;
+        var cleanMode = false;
+        var BuildMode = false;
+        var buildID = 1;
+        var Money = 6000;
+        var Experience = 0;
+
+        //Tiles.tiles.X = "4";
+        //Hexagono stuff
+
+        var A = 75;
+        var B = 129.9;
+        var C = 150;
+
+        lixoParticles = new THREE.Object3D();
+        var PropertiesBox;
+        tilesInScene = new THREE.Object3D();
+        var garbageLevel;
+        filtersInScene = new THREE.Object3D();
+        HabitatsInScene = new THREE.Object3D();
+
+
+
+
+        projector = new THREE.Projector();
+        mouseVector = new THREE.Vector3();
+
+
+        var raycaster = new THREE.Raycaster();
+        var mouse = new THREE.Vector2();
+
+
+        console.log(tiles.tiles[0].X);
+        var ultimoPAR = 0;
+        var ultimoIMPAR = 225;
+
+
+
+        var canvas = document.getElementById("gameCanvas")
+        $(canvas).addClass("game");
+        var width = canvas.clientWidth;
+        var height = canvas.clientHeight;
+
+        var renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor(0x87ceeb);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        canvas.appendChild(renderer.domElement);
+        renderer.setSize(width, height);
+
+
+        var camera = new THREE.PerspectiveCamera(35, width / height, 0.1, 3000);
+
+        var scene = new THREE.Scene();
+
+        var light = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(light);
+
+        var light1 = new THREE.PointLight(0xffffff, 0.5);
+        scene.add(light1);
+
+
+
+        scene.add(lixoParticles);
+        scene.add(tilesInScene);
+        scene.add(filtersInScene);
+        scene.add(HabitatsInScene);
+
+
+        var money = 100;
+        var geometry = new THREE.CubeGeometry(100, 100, 50);
+        var material = new THREE.MeshLambertMaterial({ color: 0x0000FF });
+        var mesh = new THREE.Mesh(geometry, material);
+        mesh.position.set(0, 0, -1000);
+
+        var geometry2 = new THREE.SphereGeometry(50, 50, 50);
+        var material2 = new THREE.MeshLambertMaterial({ color: 0xFFFF00 });
+        var mesh2 = new THREE.Mesh(geometry2, material2);
+        mesh2.position.set(100, 0, 0);
+
+
+        var texture = new THREE.TextureLoader().load("https://answers.unity.com/storage/temp/8104-imagescak1mb7g.jpg");
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.wrapT = THREE.RepeatWrapping;
+        texture.repeat.set(4, 4);
+
+        scene.add(texture);
+
+
+
+        var geometry3 = new THREE.CubeGeometry(10000, 100, 10000);
+        var material3 = new THREE.MeshLambertMaterial(
+            {
+                // map: texture,
+
+                color: 0x0000FF,
+
+                opacity: 0.5,
+                transparent: true
+            });
+
+        var geometry4 = new THREE.SphereGeometry(100, 100, 100);
+        var material4 = new THREE.MeshLambertMaterial({ color: 0xFFFF00 });
+        var mesh4 = new THREE.Mesh(geometry4, material4);
+        mesh4.position.set(0, 0, -1000);
+
+
+
+        scene.add(mesh4);
+        light.position.set(100, 1000, -1000);
+        light1.position.set(100, 1000, -1000);
+
+        var idxROW = 0;
+        var idxCOL = 0;
+        var TileId;
+
+        for (idxROW = 0; idxROW < 20; idxROW++) {
+
+            for (idxCOL = 0; idxCOL < 20; idxCOL++) {
+
+
+
+                if (idxROW % 2 == 0) {
+
+
+                    CreateHexagono(B + (B * 2) * idxCOL, (- idxROW * A) + idxROW * (C * 2));
+
+                    tiles.tiles.forEach(function (element) {
+                        if (element.X == idxCOL.toString() && element.Y == idxROW.toString())
+                            CreateLixo(B + (B * 2) * idxCOL, (- idxROW * A) + idxROW * (C * 2), element.LixoPercent)
+                    });
+
+
+
+
+                }
+                else {
+
+                    CreateHexagono((B * 2) * idxCOL, (- idxROW * A) + idxROW * (C * 2));
+                    //console.log(Tiles.tiles.X, idxCOL.toString());
+
+                    tiles.tiles.forEach(function (element) {
+                        if (element.X == idxCOL.toString() && element.Y == idxROW.toString())
+                            CreateLixo((B * 2) * idxCOL, (- idxROW * A) + idxROW * (C * 2), element.LixoPercent);
+                    });
+
+                    // console.log(arrayTiles[idxROW][idxCOL]);
+
+                }
+
+            }
+            if (idxROW % 2 == 0) {
+                ultimoPAR = ultimoPAR + C * 2;
+            }
+            else
+                ultimoIMPAR = ultimoIMPAR + C * 2;
+        }
+
+
+
+
+
+
+
+
+
+        /*var mesh3 = new THREE.Mesh(geometry3, material3);
+        mesh3.position.set(0, -100, -1000);*/
+        mesh.position.y = -30;
+        mesh.position.x = 3000;
+        mesh.position.z = 3000;
+        //ELES FICAM JUNTOS AS IF SAME MESH HYPE!!
+      //  mesh.add(mesh2);
+
+
+
+        scene.add(mesh);
+        //scene.add(mesh3);
+        var canvasPosition = renderer.domElement.getBoundingClientRect();
+
+        PaintBlue();
+        document.addEventListener("keydown", onDocumentKeyDown, false);
+        document.addEventListener("keyup", onDocumentKeyUp, false);
+        document.addEventListener("mousemove", MouseOver, false);
+        document.addEventListener("click", Click, false);
+
+        var xSpeed = 4;
+        var zSpeed = 6;
+
+        var upfil = false;
+        var downfil = true;
+
+        camera.position.y = 1200;
+        camera.rotation.x = -0.8;
+        requestAnimationFrame(render);
+        createMoney(Money);
+        setInterval(FilterAction, 3000);
+        setInterval(CreateMoreGarbage, 20000);
+        setInterval(getMoreMoney, 10000);
+        function render() {
+
+            setTimeout(PaintBlue, 1000);
+            //Click();
+
+
+            mesh.rotation.x += 0.01;
+            //mesh.rotation.y+=0.01;
+            // mesh2.rotation.x+=0.01;
+            //mesh2.rotation.y+=0.01;
+            camera.position.x = mesh.position.x;
+            camera.position.z = mesh.position.z + 1000;
+
+            if (down == true) {
+                mesh.position.z += zSpeed;
+            }
+            if (up == true) {
+                mesh.position.z -= zSpeed;
+            }
+            if (left == true) {
+                mesh.position.x -= xSpeed;
+            }
+            if (right == true) {
+                mesh.position.x += xSpeed;
+            }
+
+            renderer.render(scene, camera);
+            requestAnimationFrame(render);
+        }
+
+        function getMoreMoney()
+        {
+            HabitatsInScene.children.forEach(function (element) 
+            {
+                Money+=200;
+                console.log("Congrats! That habitat gave you 200€ " + Money);
+            })
+
+
+        }
+
+        function CreateMoreGarbage() {
+            if (!examineMode) {
+
+                for (var i = 0; i < 80; i++) {
+
+                    var xRand = Math.floor(Math.random() * 21);
+                    var yRand = Math.floor(Math.random() * 21);
+
+                    if (yRand % 2 == 0) {
+
+                        CreateLixo(B + (B * 2) * xRand, (- yRand * A) + yRand * (C * 2), Math.random());
+                    }
+                    else {
+
+                        CreateLixo((B * 2) * xRand, (- yRand * A) + yRand * (C * 2), Math.random());
+                    }
+
+                }
+
+
+            }
+        }
+
+        function PaintBlue() {
+            //console.log(tilesInScene);
+            for (var i = 0; i < tilesInScene.children.length; i++) {
+                if (tilesInScene.children[i].material.color.b != 1 || tilesInScene.children[i].material.color.r != 1 || tilesInScene.children[i].material.color.g != 1)
+                    tilesInScene.children[i].material.color.set(0x0000ff);
+                if (tilesInScene.children[i].material.color != "white")
+                    tilesInScene.children[i].material.color.set(0x0000ff);
+
+            }
+        }
+
+        function NewLayout() {
+            var i = 0;
+            for (var row = 0; row < 20; row++) {
+                for (var col = 0; col < 20; col++) {
+                    //Criar parametros do tile aqui
+                    //tipo X e Y entre outros necessarios
+
+                    if (Math.random() > 0.5) {
+                        //chance de 50% de criar lixo
+                        //Outro random aqui para quanto lixo vai ter
+
+                    }
+                    else {
+                        //dizer que nao existe lixo
+                    }
+                    i++;
+                }
+            }
+            //console.log(tiles.tiles);
+        }
+
+        function MouseOver(event) {
+            // console.log("Clicked!!!");
+            mouse.x = event.clientX - canvasPosition.x;
+            mouse.y = event.clientY - canvasPosition.y;
+            mouseVector.x = 2 * (mouse.x / width) - 1;
+
+            mouseVector.y = 1 - 2 * (mouse.y / height);
+
+            raycaster.setFromCamera(mouseVector, camera);
+
+            var intersects = raycaster.intersectObjects(tilesInScene.children);
+            for (var i = 0; i < intersects.length; i++) {
+
+                //if(intersects[i].object.material.color.b==1)
+                if (examineMode)
+                    intersects[i].object.material.color.set(0xffff00);
+                if (BuildMode)
+                    intersects[i].object.material.color.set(0xffffff);
+                if (cleanMode)
+                    intersects[i].object.material.color.set(0xff00ff);
+
+                // console.log(intersects[i]);
+                //console.log(intersects[i].object.position.x);
+            }
+
+
+        }
+
+        function Click(event) {
+            document.getElementById("money").innerHTML = Money
+            raycaster.setFromCamera(mouseVector, camera);
+            if (!cleanMode) {
+                var intersects = raycaster.intersectObjects(tilesInScene.children);
+                for (var i = 0; i < intersects.length; i++) {
+
+
+                    if (examineMode)
+                        Inspect();
+                    if (BuildMode)
+                        Build(intersects[i].object);
+
+
+                }
+
+            }
+            else {
+                var intersects = raycaster.intersectObjects(lixoParticles.children);
+                for (var i = 0; i < intersects.length; i++) {
+                    Clean(intersects[i].object);
+                }
+            }
+        }
+
+        function FilterAction() {
+
+            filtersInScene.children.forEach(function (element) {
+
+                lixoParticles.children.forEach(function (element1) {
+
+
+                    var X = Number(element1.name.split('|')[0]);
+                    var Y = Number(element1.name.split('|')[1]);
+
+                    //console.log((element.position.distanceTo(new THREE.Vector3(X,0,Y))));
+                    if (element.position.distanceTo(new THREE.Vector3(X, 0, Y)) < 467) {
+
+                        Clean(element1);
+                    }
+
+                })
+
+            });
+        }
+        var created = false;
+        function Inspect() {
+
+            var intersects = raycaster.intersectObjects(tilesInScene.children);
+            if (!created) {
+                for (var i = 0; i < intersects.length; i++) {
+                    var position = intersects[i].point;
+                    var x = position.x;
+                    var y = position.z;
+
+                    var box = new THREE.Geometry();
+                    var w = 100;
+                    created = true;
+                    box.vertices.push(new THREE.Vector3(x - w, -20, y - w));
+                    box.vertices.push(new THREE.Vector3(x + w, -20, y - w));
+                    box.vertices.push(new THREE.Vector3(x + w, -20, y + w));
+                    box.vertices.push(new THREE.Vector3(x - w, -20, y + w));
+
+
+                    box.faces.push(new THREE.Face3(1, 0, 2));
+                    box.faces.push(new THREE.Face3(2, 0, 3));
+
+                    box.computeFaceNormals();
+                    box.computeVertexNormals();
+
+                    var textId = intersects[i].object.id.toString();
+
+
+                    var textGarbageLevel = lixoParticles.opacity;
+                    console.log(lixoParticles.opacity);
+                    createText(textId, textGarbageLevel);
+
+                    PropertiesBox = new THREE.Mesh(box, new THREE.MeshLambertMaterial());
+                    scene.add(PropertiesBox);
+             
+
+                }
+            }
+            else {
+                scene.remove(PropertiesBox);
+                $("#text").remove();
+                created = false;
+            }
+
+
+
+        }
+        
+
+        function createText(TextId, textGarbageLevel) {
+
+
+            var div = document.createElement("div");
+            div.setAttribute("id", "text");
+            canvas.appendChild(div);
+            div.style.position = "absolute";
+            var x = (event.clientX - (canvasPosition.x)) * 0.9;
+            var y = (event.clientY - (canvasPosition.y)) * 0.9;
+            div.style.left = x + "px";
+            div.style.top = y + "px";
+            div.innerHTML = TextId + " <br> ";
+
+
+
+        }
+        function createMoney(money) {
+
+            var div = document.createElement("div");
+            div.setAttribute("id", "money");
+            canvas.appendChild(div);
+            div.style.position = "absolute";
+
+            div.style.left = 0 + "px";
+            div.style.top = 0 + "px";
+            div.innerHTML = money;
+
+
+
+        }
+
+
+        function Build(clickedObj) {
+            var objBuild;
+            if (clickedObj.children.length < 1) {
+
+                switch (buildID) {
+                    case 1:
+                        {
+                            objBuild = new THREE.CylinderGeometry(40, 40, 200, 75);
+                            Money -= 200;
+                            console.clear();
+                            console.log("spent 200€. You now have " + Money + "€");
+                            Experience += 300;
+                            console.log("You also got 300 XP!! Your total is" + Experience + "XP");
+                            break;
+                        }
+                    case 2:
+                        {
+
+                            objBuild = new THREE.CubeGeometry(80, 70, 100);
+                            Money -= 600;
+                            console.clear();
+                            console.log("spent 600€. You now have " + Money + "€");
+                            Experience += 300;
+                            console.log("You also got 300 XP!! Your total is" + Experience + "XP");
+                            
+                            break;
+
+                        }
+                }
+                var materialBuild = new THREE.MeshLambertMaterial({ color: 0xFFFFFF });
+                var meshBuild = new THREE.Mesh(objBuild, materialBuild);
+                meshBuild.name = buildID;
+                //console.log(clickedObj);
+                //console.log(meshBuild);
+                if (buildID != 1)
+                    HabitatsInScene.add(meshBuild);
+                else
+                    filtersInScene.add(meshBuild);
+                meshBuild.position.set(Number(clickedObj.name.split("|")[0]) + 150, 0, Number(clickedObj.name.split("|")[1]) + 150);
+            }
+            else
+                console.log("Can't build here");
+
+        }
+
+
+
+        function Clean(clickedObj) {
+            clickedObj.material.opacity -= 0.2;
+            for (var i = 0; i < 2 || i < clickedObj.children.length; i++) {
+                clickedObj.children.splice(-1, 1);
+
+            }
+            if (clickedObj.material.opacity <= 0.1) {
+                lixoParticles.remove(clickedObj);
+                Money -= 300;
+                console.clear();
+                console.log("Cleaned! Added 300€ to your currency!!   Your total is now " + Money);
+                Experience += 300;
+                console.log("You also got 300 XP!! Your total is" + Experience + "XP");
+
+            }
+
+
+        }
+
+
+
+          function onDocumentKeyDown(event) {
+            var keyCode = event.which;
+            if (keyCode == 87) {
+                up = true;
+            }
+            else if (keyCode == 83) {
+                down = true;
+
+
+            } else if (keyCode == 65) {
+                left = true;
+            } else if (keyCode == 68) {
+                right = true;
+            } else if (keyCode == 32) {
+                mesh.position.set(0, 0, 0);
+            }
+            else if (keyCode == 69) {
+                BuildMode = false;
+                examineMode = true;
+                cleanMode = false;
+            }
+            else if (keyCode == 66) {
+                BuildMode = true;
+                examineMode = false;
+                cleanMode = false;
+            }
+            else if (keyCode == 67) {
+                BuildMode = false;
+                examineMode = false;
+                cleanMode = true;
+            }
+            else if (keyCode == 49) {
+                buildID = 1;
+                console.log("Where do you want to build Filters?")
+            }
+            else if (keyCode == 50) {
+                buildID = 2;
+                console.log("Where do you want to build Placeholder Habitat?")
+            }
+        }
+        function onDocumentKeyUp(event) {
+            var keyCode = event.which;
+            if (keyCode == 87) {
+                up = false;
+            }
+            else if (keyCode == 83) {
+                down = false;
+
+
+            } else if (keyCode == 65) {
+                left = false;
+            } else if (keyCode == 68) {
+                right = false;
+            } else if (keyCode == 32) {
+                mesh.position.set(0, 0, 0);
+            }
+        }
+
+        function CreateHexagono(Xcoord, Ycoord) {
+            var hexagon = new THREE.Geometry();
+
+
+            hexagon.vertices.push(new THREE.Vector3(Xcoord + B, -49, Ycoord + 0));
+            hexagon.vertices.push(new THREE.Vector3(Xcoord + 0, -49, Ycoord + A));
+            hexagon.vertices.push(new THREE.Vector3(Xcoord + 0, -49, Ycoord + A + C));
+            hexagon.vertices.push(new THREE.Vector3(Xcoord + B, -49, Ycoord + C * 2));
+            hexagon.vertices.push(new THREE.Vector3(Xcoord + B * 2, -49, Ycoord + A + C));
+            hexagon.vertices.push(new THREE.Vector3(Xcoord + B * 2, -49, Ycoord + A));
+            hexagon.vertices.push(new THREE.Vector3(Xcoord + B, -49, Ycoord + 0));
+
+            var hexagonMesh = new THREE.Mesh(hexagon, new THREE.MeshLambertMaterial());
+            var line = new THREE.Line(hexagon, new THREE.LineBasicMaterial({ color: 0xffffff, opacity: 1 }));
+            scene.add(line);
+
+            var materialNormal = new THREE.MeshLambertMaterial(
+                {
+                    // map: texture,
+
+                    color: 0x0000FF,
+
+                    opacity: 0.5,
+                    transparent: true
+                });
+            var face = new THREE.Face3(0, 1, 2);
+
+            hexagon.faces.push(face);
+            hexagon.faces.push(new THREE.Face3(3, 4, 5));
+            hexagon.faces.push(new THREE.Face3(0, 2, 3));
+            hexagon.faces.push(new THREE.Face3(3, 5, 0));
+
+
+            hexagon.computeFaceNormals();
+            hexagon.computeVertexNormals();
+            hexaMesh = new THREE.Mesh(hexagon, materialNormal);
+            hexaMesh.name = Xcoord + "|" + Ycoord;
+            tilesInScene.add(hexaMesh);
+
+            //hexagon.add(line);
+            //hexagonMesh.add(line);
+            //tilesInScene.add(hexagonMesh);
+            //tilesInScene.add(line);
+            //tilesInScene.add(hexagon);
+
+
+        }
+
+        function CreateLixo(Xcoord, Ycoord, lixoPercent) {
+
+
+            var hexagon = new THREE.Geometry();
+
+
+            hexagon.vertices.push(new THREE.Vector3(Xcoord + B, -49, Ycoord + 0));
+            hexagon.vertices.push(new THREE.Vector3(Xcoord + 0, -49, Ycoord + A));
+            hexagon.vertices.push(new THREE.Vector3(Xcoord + 0, -49, Ycoord + A + C));
+            hexagon.vertices.push(new THREE.Vector3(Xcoord + B, -49, Ycoord + C * 2));
+            hexagon.vertices.push(new THREE.Vector3(Xcoord + B * 2, -49, Ycoord + A + C));
+            hexagon.vertices.push(new THREE.Vector3(Xcoord + B * 2, -49, Ycoord + A));
+            hexagon.vertices.push(new THREE.Vector3(Xcoord + B, -49, Ycoord + 0));
+
+
+            var materialTainted = new THREE.MeshLambertMaterial(
+                {
+                    // map: texture,
+
+                    color: 0x00FF00,
+
+                    opacity: 0.5,
+                    transparent: true
+                });
+            materialTainted.opacity = Number(lixoPercent);
+            var face = new THREE.Face3(0, 1, 2);
+
+            hexagon.faces.push(face);
+            hexagon.faces.push(new THREE.Face3(3, 4, 5));
+            hexagon.faces.push(new THREE.Face3(0, 2, 3));
+            hexagon.faces.push(new THREE.Face3(3, 5, 6));
+
+
+            hexagon.computeFaceNormals();
+            hexagon.computeVertexNormals();
+            var lixoMesh = new THREE.Mesh(hexagon, materialTainted);
+            lixoMesh.name = Xcoord + "|" + Ycoord;
+            lixoParticles.add(lixoMesh);
+            //scene.add(new THREE.Mesh(hexagon, materialTainted));
+
+
+
+            //criar lixo aleatorio debaixo de agua
+            for (var idx = 0; idx < 30 * lixoPercent; idx++) {
+
+
+                var lixo = new THREE.CylinderGeometry(Math.random() * 5, Math.random() * 5, 10, 6);
+                var materialLixo = new THREE.MeshLambertMaterial({ color: 0x826863 });
+                var meshLixo = new THREE.Mesh(lixo, materialLixo);
+                meshLixo.position.set(Xcoord + Math.random() * 250, -Math.random() * 200, Ycoord + Math.random() * 250);
+
+                meshLixo.rotation.x = Math.random();
+                meshLixo.rotation.y = Math.random();
+                meshLixo.rotation.z = Math.random();
+
+                lixoMesh.add(meshLixo);
+
+            }
+        }
+
+        window.addEventListener('resize', onWindowResize, false)
+
+        function onWindowResize(e) {
+            width = canvas.clientWidth;
+            height = canvas.clientHeight;
+            renderer.setSize(width, height);
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+        }
+
+    </script>
+
+</body>
+
+</html>

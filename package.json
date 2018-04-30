@@ -1,0 +1,22 @@
+{
+  "name": "garbagejson",
+  "version": "1.0.0",
+  "description": "json file",
+  "main": "BackUp.js",
+  "dependencies": {
+    "express": "^4.16.3",
+    "fs": "0.0.1-security",
+    "html": "^1.0.0",
+    "http": "0.0.0",
+    "mysql": "^2.15.0",
+    "node": "^9.11.0",
+    "require": "^2.4.20",
+    "sql": "^0.78.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,219 @@
+.container
+{
+  max-width:700px;
+  margin: 0 auto;
+  border-left: 2px solid;
+  border-right: 2px solid;
+  border-top: 2px solid;
+  border-bottom: 1px solid;
+  border-radius:25px;
+  padding: 5px;
+  background-image: url("data/GradientBox.jpg");
+}
+.centertext{
+  text-align:center;
+  max-width:600px;
+  margin:0 auto;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size:20px;
+
+}
+.navigationtop{
+  border:black 2px solid;
+  background:white;
+  text-align: center;
+  margin-top:10px;
+  margin-bottom:10px;
+  border-radius:10px;
+  position:sticky;
+  top: 0;
+}
+
+text{
+  
+}
+
+#Logo{
+  
+}
+
+#garbage1{
+  margin-top:150px;
+  margin-right:30px;
+  position:sticky;
+  top:120px;
+  float:right;
+  transform: rotate(110deg);
+}
+
+#garbage2{
+  margin-top:500px;
+  margin-right:55px;
+  position:sticky;
+  top:120px;
+  float:right;
+  transform: rotate(45deg);
+}
+#garbage3{
+  margin-top:600px;
+  position:sticky;
+  top:120px;
+  float:left;
+  transform: rotate(70deg);
+}
+#garbage4{
+  margin-top:300px;
+  margin-left:50px;
+  position:sticky;
+  top:265px;
+  float:left;
+  transform: rotate(90deg);
+}
+
+.navigationtop li{
+  list-style:square inside;
+  display: inline;
+  
+}
+
+.navigationtop img{
+  padding-right: 600px;
+}
+
+
+.navigation{
+  border-radius:10px;
+  max-width:400px;
+  position: fixed;
+  background:white;
+  margin-left:25px;
+  padding-right:100px;
+  border:black 2px solid
+}
+.text_with_2px_border
+{
+text-shadow: 
+    -1px -1px 0px #000,
+     0px -1px 0px #000,
+     1px -1px 0px #000,
+    -1px  0px 0px #000,
+     1px  0px 0px #000,
+    -1px  1px 0px #000,
+     0px  1px 0px #000,
+     1px  1px 0px #000,
+    -2px -2px 0px #000,
+    -1px -2px 0px #000,
+     0px -2px 0px #000,
+     1px -2px 0px #000,
+     2px -2px 0px #000,
+     2px -1px 0px #000,
+     2px  0px 0px #000,
+     2px  1px 0px #000,
+     2px  2px 0px #000,
+     1px  2px 0px #000,
+     0px  2px 0px #000,
+    -1px  2px 0px #000,
+    -2px  2px 0px #000,
+    -2px  1px 0px #000,
+    -2px  0px 0px #000,
+    -2px -1px 0px #000;
+}
+
+.title{
+  text-align:center;
+  font-family:sans-serif;
+  max-width:600px;
+  margin:0 auto;
+  font-size:20px;
+}
+
+.Atitle{
+  text-align:center;
+  font-family:sans-serif;
+  padding-left:30px;
+  margin-top:0px;
+  font-size:20px;
+}
+.Atext{
+  text-align:center;
+}
+.game{
+ position: relative;
+  overflow: hidden;
+  margin: 5px;
+  width: 790px;
+  height: 500px;
+  
+}
+#FriendList{
+  position: fixed;
+  float: right;
+  bottom:0px;
+  margin-left: 1200px;
+  background:white;
+  max-width:100px;
+  padding-right: 50px;
+  border:black 2px solid;
+
+}
+
+.chat{
+  max-width:100px;
+  padding-right: 50px;
+  border:black 2px solid;
+  position: fixed;
+  float: right;
+  bottom:0px;
+  margin-left: 1000px;
+  background:white;
+}
+
+a:hover{
+  background-color:gray;
+}
+
+.navigationBottom{
+  border-radius:10px;
+  max-width:400px;
+  background:white;
+  border:black 2px solid
+
+}
+
+.backgroundcolorsienna{
+  background:sienna;
+  max-width: 600px;
+  margin:0 auto;
+  padding-bottom: 15px;
+  padding-top: 15px;
+  border-radius: 15px;
+  border: black 2px solid;
+}
+
+#background
+{
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-image: url("data/background.jpg")
+}
+.borderimage{
+  border:black 2px solid;
+}
+#header
+{
+  align-content: left ;
+  background: sienna;
+}
+
+.hidden {
+  display:hidden;
+}
+.idimage{
+  border:black 2px solid;
+  float:right;
+  margin-top:25px; 
+}
+.article{
+  padding-left:20px; 
+  display:inline-flex;
+}
