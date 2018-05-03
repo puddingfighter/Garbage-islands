@@ -1,32 +1,21 @@
-
-
 const express = require('express');
 const mysql = require('mysql');
 const fs = require('fs');
 const http = require('http');
-var data = fs.readFileSync('users.json');
-var usersTxt = JSON.parse(data);
+
 var app = express();
 var router = express.Router();
 
-
 var port = 3000;
 
-app.listen(port, () => console.log('Example app listening on port 3000!'));
-
-app.use(express.static('src'));
+app.use(express.static('public'));
 
 var con = mysql.createConnection({
-//    host: "p466714.mysql.ihc.ru",
-//    user: "p466714_pedr00a",
-//    password: "Q8U7DK5s6Y",
-  host:"localhost",
-   user: "root",
-   password: "PoPogoio12",
-   port: 3306,
+    host:"localhost",
+    user: "root",
+    password: "PoPogoio12",
+    port: 3306,
     database: "garbageislands",
-   
-  
 });
 
 con.connect(function (err){
@@ -35,11 +24,9 @@ con.connect(function (err){
 }); 
 
 
-
 app.get("/users/:UserName/:Password/:Age/:UserExp", GetUser);
 
 function GetUser(req,res){
-
     var reqData = req.params;
     var name = reqData.UserName;
     var pass = reqData.Password;
@@ -47,30 +34,19 @@ function GetUser(req,res){
     var age = Number(reqData.Age);
     var level = 0;
 
-   
-    usersTxt[name] = age;
-
-    var data = JSON.stringify(usersTxt, null, 2);
-
-    fs.writeFile('users.json',data);
-
     let sql = "INSERT INTO Users ( UserName, Age, Password, UserExp, UserLevel) values ('" + name + "' , "+ age + ",'" + pass + "',"+ exp +"," + level + "); ";
 
     con.query(sql,function (err, result) {
-    if (err) throw err;
-   console.log("UserCreated");
-  });
-
-  5-20
-  4.2-x
-
+        if (err) throw err;
+        console.log("UserCreated");
+    });
 }
-var realUserName;
+
 
 app.get("/game", LoginV);
 
 var userId;
-
+var realUserName;
 var loggedIn;
 
 function LoginV(req,res){
@@ -93,9 +69,6 @@ function LoginV(req,res){
         console.log("Welcome " + realUserName + " with Id " + userId);
     });
     res.send(realUserName);
-    
- 
-
 }
 
 
@@ -103,15 +76,4 @@ function setGame(){
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
+app.listen(port, () => console.log('Example app listening on port 3000!'));

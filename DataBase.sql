@@ -16,6 +16,7 @@ Create Table Island(
     foreign key (UserId) references Users(UserId),
 	primary key (IslandId)
 );
+
 Create table Tile(
 	TileId int not null auto_increment,
     TileX float not null,
@@ -28,6 +29,7 @@ Create table Tile(
     primary key (TileId),
     foreign key (IslandId) references Island (IslandId)
 );
+
 create Table Achievement(
 	AchievementId int not null,
     UserId int,

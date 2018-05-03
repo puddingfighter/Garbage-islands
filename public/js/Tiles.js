@@ -1,4 +1,4 @@
-var tiles = 
+const tiles = 
 {
     "tiles": [
     {
